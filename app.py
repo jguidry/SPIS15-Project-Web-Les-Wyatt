@@ -15,6 +15,11 @@ from flask import jsonify
 # Initialize the Flask application
 app = Flask(__name__)
 
+@app.route('/')
+def renderMain():
+    return render_template('home.html')
+
+
 # This is the path to the upload directory
 app.config['UPLOAD_FOLDER'] = 'uploads/'
 # These are the extension that we are accepting to be uploaded
@@ -36,7 +41,7 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 # The root where we ask user to enter a file
-@app.route('/')
+@app.route('/index')
 def index():
     return render_template('index.html')
 

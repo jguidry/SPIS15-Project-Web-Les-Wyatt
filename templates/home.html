@@ -1,17 +1,43 @@
 <!DOCTYPE html>
-<html>
-{% extends "layout.html" %}
 
-{% block title %}Home{% endblock %}
+<html lang="en">
+  <head>
+  <style>
 
-{% block content %}
-<body>
-  <h1>Home</h1>
+body {
+	background-image: url("http://2.bp.blogspot.com/-wVHwa0DcCrI/Uh9g03Kbp4I/AAAAAAAAEuw/QPlXkba8EoY/s1600/Background-Grid3.jpg");
+}
+
+#header {
+	text-align:center;
+	padding:5px;
+}
+
+#buttons {
+	text-align:center;
+	padding:10px;
+	border-style: solid;
+	border-width:5px;
+	
+}
+
+  </style>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
+          rel="stylesheet">
+  </head>
+  <body>
+	<div id = "header">
+    <h1 style="color:white"><font size = "700">Sus Messages</h1>
+	</div>
+	<div id = "buttons">
   <ul>
-    <li><a href="/index">Encode a secret message</a></li>
+    <li><a href="/index"><font size= "400">Encode a secret message</a></li>
     <li><a href="/page2">Decode a secret message</a></li>
-
+	</div>
   </ul>
-</body>
-{% endblock %}
+  </body>
 </html>
+
+  
+
+
