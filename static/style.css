@@ -1,43 +1,20 @@
 body {
+	background-image: url("http://2.bp.blogspot.com/-wVHwa0DcCrI/Uh9g03Kbp4I/AAAAAAAAEuw/QPlXkba8EoY/s1600/Background-Grid3.jpg");
+}
 
-    background-color: #008080;
-    color: white;
+#header {
+	text-align:center;
+	padding:5px;
+}
+
+#buttons {
+	text-align:center;
+	padding:10px;
+	border-style: solid;
+	border-width:5px;
+	
 }
 
 
-a {
 
-    color: yellow;
-}
 
-a:hover {
-
-    color:pink;
-}
-
-a:visited {
-
-    color:green;
-}
-
-table.jGameBoard {
-    background-color: #0033CC;
-    color: yellow;
-
-    font-family: sans-serif;
-
-}
-
-table.jGameBoard * td {
-    border: 2px solid yellow;
-    padding: 4px;
-}
-
-tr.jHead td {
-    text-align:center;
-}
-
-tr.jBoard {
-    font-weight: bold;
-    font-size: 200%;
-}

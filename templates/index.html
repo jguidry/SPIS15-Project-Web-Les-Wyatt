@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"
-          rel="stylesheet">
-  </head>
-  <body>
+{% extends "layout.html" %}
+{% block title %}Encode{% endblock %}
+{% block content %}
     <div class="container">
       <div class="header">
         <h3 class="text-muted"style="color:red">Encode Your Message</h3>
@@ -23,6 +19,4 @@
         	<input type="file" name="file"><br /><br />
         	<input type="submit" value="Upload">
 	</div>
-  </body>
-</html>
- 
+{% endblock %}
