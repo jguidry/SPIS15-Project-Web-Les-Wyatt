@@ -41,10 +41,17 @@ def allowed_file(filename):
            filename.rsplit('.', 1)[1] in app.config['ALLOWED_EXTENSIONS']
 
 # The root where we ask user to enter a file
-@app.route('/index')
-def index():
-    return render_template('index.html')
+@app.route('/encode')
+def encode():
+    return render_template('context.html')
 
+@app.route('/hidden')
+def hidden():
+    return render_template('hidden.html')
+
+@app.route('/decode')
+def decode():
+    return render_template('decode.html')
 
 # Route that will process the file upload
 @app.route('/upload', methods=['POST'])
@@ -70,13 +77,16 @@ def upload():
         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
         # Redirect the user to the uploaded_file route, which
         # will basicaly show on the browser the uploaded file
-        return redirect(url_for('uploaded_file',filename=filename))
+        return redirect(url_for('hidden'))
+                        
 
 
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
 # directory and show it on the browser, so if the user uploads
 # an image, that image is going to be show after the upload
+
+
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):

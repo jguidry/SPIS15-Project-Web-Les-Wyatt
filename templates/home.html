@@ -1,15 +1,19 @@
 {% extends "layout.html" %}
 {% block title %}Home{% endblock %}
 {% block content %}
-	<div id = "header">
-    <h1 style="color:white"><font size = "700">Sus Messages</h1>
-	</div>
-	<div id = "buttons">
-  <ul>
-    <li><a href="/index"><font size= "400">Encode a secret message</a></li>
-    <li><a href="/page2">Decode a secret message</a></li>
-	</div>
-  </ul>
+<div id = "header">
+<h1 style="color:white"><font size = "700">Sus Messages</h1>
+</div>
+</br>
+</br>
+
+
+
+<div id = "header">	
+   <a href="/encode"class="btn btn-default btn-lg" role = "button">Encode secret message</a>
+   <a href="/decode"class="btn btn-default btn-lg" role = "button">Decode secret message</a>
+</div>
+	
 
 {% endblock %}
   
