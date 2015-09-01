@@ -189,8 +189,15 @@ def upload2():
         # Redirect the user to the uploaded_file route, which
         # will basicaly show on the browser the uploaded file
         session["encodedimage"] = hideSecretMessage(session['contextFile'], session['hiddenFile'])
-        return render_template('finishedImage.html', filename = session['encodedimage'])
+        return render_template('finishedImage.html', filename = fixFileName(session['encodedimage']))
 
+
+def fixFileName(stupidfilename):
+    '''change a file name such as
+    home/linux/ieng6/spis15/spis15ak/github/SPIS15-Project-Web-Sierra-Lauren/uploads/newImagehMICau.jpg
+    into /uploads/newImagehMICau.jpg'''
+    goodfilename = "/" + app.config['UPLOAD_FOLDER'] + os.path.basename(stupidfilename)
+    return goodfilename
    
     
 # This route is expecting a parameter containing the name
@@ -200,7 +207,7 @@ def upload2():
 
 
 
-@app.route('/uploads/<filename>')
+@app.route('/uploads/<filename>/')
 def uploaded_file(filename):
     #To do: change this to the page where we do something with the file
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
@@ -209,7 +216,7 @@ if __name__ == '__main__':
     app.run(host="0.0.0.0",port=2222,debug=True)
 
 
-
+#
 
 
 
