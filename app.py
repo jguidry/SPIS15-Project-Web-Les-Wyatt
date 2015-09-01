@@ -12,6 +12,7 @@ from werkzeug import secure_filename
 from flask import jsonify
 from flask import session
 from PIL import Image, ImageDraw
+import tempfile
 
 
 # Initialize the Flask application
@@ -96,14 +97,49 @@ def upload1():
         print "block 3"
         # Make the filename safe, remove unsupported chars
         filename = secure_filename(file.filename)
-        session['contextFile'] = filename
+        fullFilename = (os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        session['contextFile'] = fullFilename
         # Move the file form the temporal folder to
         # the upload folder we setup
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(fullFilename)
         # Redirect the user to the uploaded_file route, which
         # will basicaly show on the browser the uploaded file
     
     return redirect(url_for('hidden'))
+
+##############Image encoding#################
+def embedDigits2( contextVal, messageVal):
+    '''embeds the message value into the context picture'''
+    #clears the last two bits of the context image and inserts the bits from the message
+    return ((contextVal >> 2)<<2) + (messageVal)
+
+
+def mostSignificant2(num):
+    '''Returns the two most significant bits of an 8-bit binary number'''
+    #shifts the number over 6 bits so only the two most significant bits remain
+    return num >> 6
+
+
+
+def getTempFileName(myPrefix):
+    f = tempfile.NamedTemporaryFile(suffix = ".bmp", prefix = myPrefix, delete=False, dir=app.config['UPLOAD_FOLDER'])
+    f.close()
+    return f.name
+
+
+def recoverSecretMessage2Bits(context):
+    picCopy = Image.new('RGB',context.size,(0,0,0))
+    for x in range(context.size[0]):
+        for y in range(context.size[1]):
+            (r,g,b) = context.getpixel( (x, y) )
+            
+            r = getLeastSignificant2(r)<<6
+            g = getLeastSignificant2(g)<<6
+            b = getLeastSignificant2(b)<<6
+            picCopy.putpixel( (x,y), ( r, g, b ) )
+    return picCopy.show()#edit
+    picCopy.save()#edit###
+
 
 def hideSecretMessage(contextFilename, hiddenFilename):
     context = Image.open(contextFilename)
@@ -112,6 +148,9 @@ def hideSecretMessage(contextFilename, hiddenFilename):
 
 
 def hideSecretMessage2Bits(context, message):
+    if context.size[0] < message.size[0] or context.size[1] < message.size[1]:
+        message = message.crop((0,0, context.size[0], context.size[1]))
+        return hideSecretMessage2Bits(context, message)
     picCopy = Image.new('RGB',context.size,(0,0,0))
     for x in range(context.size[0]):
         for y in range(context.size[1]):
@@ -124,6 +163,7 @@ def hideSecretMessage2Bits(context, message):
             g = embedDigits2(g, message_g)
             b = embedDigits2(b, message_b)
             picCopy.putpixel( (x,y), ( r, g, b ) )
+    
     name = getTempFileName("encodedimage")
     print "In  hideSecretMessage2Bits, name =", name
     picCopy.save(name)
@@ -141,10 +181,11 @@ def upload2():
     else:
         # Make the filename safe, remove unsupported chars
         filename = secure_filename(file.filename)
-        session['hiddenFile'] = filename
+        fullFileName = (os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        session['hiddenFile'] = fullFileName
         # Move the file form the temporal folder to
         # the upload folder we setup
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        file.save(fullFileName)
         # Redirect the user to the uploaded_file route, which
         # will basicaly show on the browser the uploaded file
         session["encodedimage"] = hideSecretMessage(session['contextFile'], session['hiddenFile'])
@@ -165,41 +206,10 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=5555,debug=True)
+    app.run(host="0.0.0.0",port=2222,debug=True)
 
 
 
-##############Image encoding: still needs editing######################
-def embedDigits2( contextVal, messageVal):
-    '''embeds the message value into the context picture'''
-    #clears the last two bits of the context image and inserts the bits from the message
-    return ((contextVal >> 2)<<2) + (messageVal)
-
-
-def mostSignificant2(num):
-    '''Returns the two most significant bits of an 8-bit binary number'''
-    #shifts the number over 6 bits so only the two most significant bits remain
-    return num >> 6
-
-
-
-def getTempFileName(myPrefix):
-    f = NamedTemporaryFile(suffix = ".bmp", prefix = myPrefix, delete=False, dir=app.config['UPLOAD_FOLDER'])
-    f.close()
-    return f.name
-
-def recoverSecretMessage2Bits(context):
-    picCopy = Image.new('RGB',context.size,(0,0,0))
-    for x in range(context.size[0]):
-        for y in range(context.size[1]):
-            (r,g,b) = context.getpixel( (x, y) )
-            
-            r = getLeastSignificant2(r)<<6
-            g = getLeastSignificant2(g)<<6
-            b = getLeastSignificant2(b)<<6
-            picCopy.putpixel( (x,y), ( r, g, b ) )
-    return picCopy.show()#edit
-    picCopy.save()#edit###
 
 
 
