@@ -64,6 +64,9 @@ def decode():
 @app.route('/finishedImage')
 def finishedImage():
     return render_template('finishedImage.html')
+@app.route('/finishedDecode')
+def decodedImage():
+    return render_template('finishedDecode.html')
 
 
 def check_file(file):
@@ -126,7 +129,13 @@ def getTempFileName(myPrefix):
     f.close()
     return f.name
 
+def decodeSecretImage(context):
+    contextImage = Image.open(context)
+    return recoverSecretMessage2Bits(contextImage)
 
+def getLeastSignificant2(num):
+    return num % 4
+    
 def recoverSecretMessage2Bits(context):
     picCopy = Image.new('RGB',context.size,(0,0,0))
     for x in range(context.size[0]):
@@ -137,9 +146,11 @@ def recoverSecretMessage2Bits(context):
             g = getLeastSignificant2(g)<<6
             b = getLeastSignificant2(b)<<6
             picCopy.putpixel( (x,y), ( r, g, b ) )
-    return picCopy.show()#edit
-    picCopy.save()#edit###
-
+    nameDecoded = getTempFileName("decodedImage")
+    #print "In  hideSecretMessage2Bits, name =", name
+    picCopy.save(nameDecoded)
+    return nameDecoded
+   
 
 def hideSecretMessage(contextFilename, hiddenFilename):
     context = Image.open(contextFilename)
@@ -198,7 +209,30 @@ def fixFileName(stupidfilename):
     into /uploads/newImagehMICau.jpg'''
     goodfilename = "/" + app.config['UPLOAD_FOLDER'] + os.path.basename(stupidfilename)
     return goodfilename
-   
+
+
+#FinishedDecode page
+@app.route('/upload3', methods=['POST'])
+def upload3():
+    # Get the name of the uploaded file
+    file = request.files['returnFile']
+    # Check if the file is one of the allowed types/extensions
+    result = check_file(file )
+    if result != '':
+        return result
+    else:
+        # Make the filename safe, remove unsupported chars
+        filename = secure_filename(file.filename)
+        fullFileName = (os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        session['returnFile'] = fullFileName
+        # Move the file form the temporal folder to
+        # the upload folder we setup
+        file.save(fullFileName)
+        # Redirect the user to the uploaded_file route, which
+        # will basicaly show on the browser the uploaded file
+        session["decodedimage"] = decodeSecretImage(session['returnFile'])
+        return render_template('finishedDecode.html', filename = fixFileName(session['decodedimage']))
+
     
 # This route is expecting a parameter containing the name
 # of a file. Then it will locate that file on the upload
@@ -213,7 +247,7 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=2222,debug=True)
+    app.run(host="0.0.0.0",port=1111,debug= True)
 
 
 #

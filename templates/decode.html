@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Encode{% endblock %}
+{% block title %}Decode{% endblock %}
 {% block content %}
     <div class="container">
       <div id ="header">
@@ -8,8 +8,8 @@
       <hr/>
       <div>
 
-	<form action="upload" method="post" enctype="multipart/form-data">
-        	<input type="file" name="file"><br /><br />
+	<form action="upload3" method="post" enctype="multipart/form-data">
+        	<input type="file" name="returnFile"><br /><br />
         	<input type="submit" value="Upload">
       </form>
       </div>
