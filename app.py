@@ -22,7 +22,7 @@ app.secret_key = 'pioaug7OIG3"LOi^fg'
 
 @app.route('/')
 def renderMain():
-    return render_template('home.html')
+    return render_template('home.html') 
 
 @app.route('/startOver')
 def startOver():
@@ -68,9 +68,9 @@ def finishedImage():
 def decodedImage():
     return render_template('finishedDecode.html')
 
-@app.route('/Error')
-def ErrorMessage():
-    return render_template('Error.html')
+##@app.route('/Error')
+##def ErrorMessage():
+##    return render_template('Error.html')
 
 
 
@@ -164,27 +164,42 @@ def hideSecretMessage(contextFilename, hiddenFilename):
 
 
 def hideSecretMessage2Bits(context, message):
-##    if context.size[0] < message.size[0] or context.size[1] < message.size[1]:
-##        return render_template('Error.html')
-
-    picCopy = Image.new('RGB',context.size,(0,0,0))
-    for x in range(context.size[0]):
-        for y in range(context.size[1]):
-            (r,g,b) = context.getpixel( (x, y) )
-            (r2,g2,b2) = message.getpixel( (x, y) )
-            message_r = mostSignificant2(r2)
-            message_g = mostSignificant2(g2)
-            message_b = mostSignificant2(b2)
-            r = embedDigits2(r, message_r)
-            g = embedDigits2(g, message_g)
-            b = embedDigits2(b, message_b)
-            picCopy.putpixel( (x,y), ( r, g, b ) )
     
-    name = getTempFileName("encodedimage")
-    print "In  hideSecretMessage2Bits, name =", name
-    picCopy.save(name)
-    return name
-
+    picCopy = Image.new('RGB',message.size,(0,0,0))
+    if context.size[0] > message.size[0] or context.size[1] > message.size[1]:
+        for x in range(message.size[0]):
+            for y in range(message.size[1]):
+                (r,g,b) = context.getpixel( (x, y) )
+                (r2,g2,b2) = message.getpixel( (x, y) )
+                message_r = mostSignificant2(r2)
+                message_g = mostSignificant2(g2)
+                message_b = mostSignificant2(b2)
+                r = embedDigits2(r, message_r)
+                g = embedDigits2(g, message_g)
+                b = embedDigits2(b, message_b)
+                picCopy.putpixel( (x,y), ( r, g, b ) )
+    
+        name = getTempFileName("encodedimage")
+        print "In  hideSecretMessage2Bits, name =", name
+        picCopy.save(name)
+        return name
+    else:
+        for x in range(context.size[0]):
+            for y in range(context.size[1]):
+                (r,g,b) = context.getpixel( (x, y) )
+                (r2,g2,b2) = message.getpixel( (x, y) )
+                message_r = mostSignificant2(r2)
+                message_g = mostSignificant2(g2)
+                message_b = mostSignificant2(b2)
+                r = embedDigits2(r, message_r)
+                g = embedDigits2(g, message_g)
+                b = embedDigits2(b, message_b)
+                picCopy.putpixel( (x,y), ( r, g, b ) )
+    
+        name = getTempFileName("encodedimage")
+        print "In  hideSecretMessage2Bits, name =", name
+        picCopy.save(name)
+        return name
 
 @app.route('/upload2', methods=['POST'])
 def upload2():
@@ -252,7 +267,7 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=1112,debug= True)
+    app.run(host="0.0.0.0",port=1113,debug= True)
 
 
 #
