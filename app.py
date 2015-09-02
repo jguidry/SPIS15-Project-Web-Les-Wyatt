@@ -68,6 +68,11 @@ def finishedImage():
 def decodedImage():
     return render_template('finishedDecode.html')
 
+@app.route('/Error')
+def ErrorMessage():
+    return render_template('Error.html')
+
+
 
 def check_file(file):
     # Check if the file is one of the allowed types/extensions
@@ -99,7 +104,7 @@ def upload1():
     else:
         print "block 3"
         # Make the filename safe, remove unsupported chars
-        filename = secure_filename(file.filename)
+        filename = getTempFileName(secure_filename(file.filename))
         fullFilename = (os.path.join(app.config['UPLOAD_FOLDER'], filename))
         session['contextFile'] = fullFilename
         # Move the file form the temporal folder to
@@ -159,9 +164,9 @@ def hideSecretMessage(contextFilename, hiddenFilename):
 
 
 def hideSecretMessage2Bits(context, message):
-    if context.size[0] < message.size[0] or context.size[1] < message.size[1]:
-        message = message.crop((0,0, context.size[0], context.size[1]))
-        return hideSecretMessage2Bits(context, message)
+##    if context.size[0] < message.size[0] or context.size[1] < message.size[1]:
+##        return render_template('Error.html')
+
     picCopy = Image.new('RGB',context.size,(0,0,0))
     for x in range(context.size[0]):
         for y in range(context.size[1]):
@@ -191,7 +196,7 @@ def upload2():
         return result
     else:
         # Make the filename safe, remove unsupported chars
-        filename = secure_filename(file.filename)
+        filename = getTempFileName(secure_filename(file.filename))
         fullFileName = (os.path.join(app.config['UPLOAD_FOLDER'], filename))
         session['hiddenFile'] = fullFileName
         # Move the file form the temporal folder to
@@ -222,7 +227,7 @@ def upload3():
         return result
     else:
         # Make the filename safe, remove unsupported chars
-        filename = secure_filename(file.filename)
+        filename = getTempFileName(secure_filename(file.filename))
         fullFileName = (os.path.join(app.config['UPLOAD_FOLDER'], filename))
         session['returnFile'] = fullFileName
         # Move the file form the temporal folder to
@@ -247,7 +252,7 @@ def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'],filename)
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0",port=1111,debug= True)
+    app.run(host="0.0.0.0",port=1112,debug= True)
 
 
 #
