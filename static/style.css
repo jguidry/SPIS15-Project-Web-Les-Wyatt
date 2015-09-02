@@ -3,11 +3,53 @@ body {
 }
 
 #header {
+	position: relative;
 	text-align:center;
 	padding:5px;
 }
 
+#footer {
+    
+	color:white;
+	clear:both;
+	text-align:center;
+	padding:5px;	 	
+	position: absolute;
+	bottom: 0;
+	font-size: 100;
+}
 
+#box {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    position: relative;
+    -webkit-animation-name: example; /* Chrome, Safari, Opera */
+    -webkit-animation-duration: 7s; /* Chrome, Safari, Opera */
+    -webkit-animation-iteration-count: infinite; /* Chrome, Safari, Opera */
+    animation-name: example;
+    animation-duration: 7s;
+    animation-iteration-count: infinite;
+    
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes example {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:yellow; left:1800px; top:0px;}   
+    50%  {background-color:blue; left:1800px; top:300px;}
+    75%  {background-color:green; left:0px; top:300px;}
+    100% {background-color:red; left:0px; top:0px;}
+}
+
+/* Standard syntax */
+@keyframes example {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:yellow; left:1800px; top:0px;}
+    50%  {background-color:blue; left:1800px; top:300px;}
+    75%  {background-color:green; left:0px; top:300px;}
+    100% {background-color:red; left:0px; top:0px;}
+}
 
 
 
