@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block title %}Decode{% endblock %}
+{% block content %}
+    <div class="container">
+      <div id="header">
+        <h3 class="text-muted"style="color:white">Here Is Your Secret Image</h3>
+      </div>
+      <hr/>
+      <div>
+	<form>
+
+	<img src = "{{filename}}" alt = "hidden image retrieved from context image." />
+	<a href="/"class="btn btn-default btn-lg" role = "button">Return Home</a>
+	
+        	
+      </form>
+      </div>
+    </div>
+	<h4>
+<div id = "footer">
+<font size = "100"> Copyright &copy Sus Messages</div></h4>
+{% endblock %}
